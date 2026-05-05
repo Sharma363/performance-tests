@@ -1,0 +1,38 @@
+name: Performance Test
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  jmeter-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+
+    - name: Download JMeter
+      run: |
+        wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.5.tgz
+        tar -xzf apache-jmeter-5.5.tgz
+
+    - name: Run JMeter Test
+      run: |
+        apache-jmeter-5.5/bin/jmeter \
+        -n \
+        -t RDA_API_Project.jmx \
+        -l RDA_results.jtl
+
+    - name: Upload JMeter Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: jmeter-results
+        path: results.jtl
