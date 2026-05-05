@@ -30,6 +30,7 @@ jobs:
         -n \
         -t RDA_API_Project.jmx \
         -l RDA_results.jtl
+        -Jjmeter.save.saveservice.subresults=false
 
     - name: Upload JMeter Results
       uses: actions/upload-artifact@v4
